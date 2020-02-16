@@ -23,17 +23,22 @@
 */
 
 #include "HX711.h"
+#include <LiquidCrystal.h>
 
-#define calibration_factor -7050.0 //This value is obtained using the SparkFun_HX711_Calibration sketch
+#define calibration_factor 391000.0 //This value is obtained using the SparkFun_HX711_Calibration sketch
 
-#define DOUT  3
-#define CLK  2
+#define DOUT 7
+#define CLK 6
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+
 
 HX711 scale;
 
 void setup() {
   Serial.begin(9600);
   Serial.println("HX711 scale demo");
+
+    lcd.begin(16, 2);
 
   scale.begin(DOUT, CLK);
   scale.set_scale(calibration_factor); //This value is obtained by using the SparkFun_HX711_Calibration sketch
@@ -47,4 +52,7 @@ void loop() {
   Serial.print(scale.get_units(), 1); //scale.get_units() returns a float
   Serial.print(" kg"); //You can change this to kg but you'll need to refactor the calibration_factor
   Serial.println();
+  lcd.setCursor(0,0);
+  lcd.print(scale.get_units()); //scale.get_units() returns a float
+
 }
